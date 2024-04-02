@@ -1,7 +1,10 @@
 const fs = require('fs');
 const express = require('express')
 const cors = require('cors');
-const { Pool } = require('pg');
+const { 
+  // Pool,
+  Client
+} = require('pg');
 const app = express()
 const port = process.env.PORT || 3000
 
@@ -20,7 +23,8 @@ const connectionString = process.env.CONNECT_URL;
 //   : fs.readFileSync('./ca-certificate.crt').toString()
 // console.log('CA CERTIFICATE: ',certificate.substring(0, 30))
 
-const pool = new Pool({
+// const connection = new Pool({
+const connection = new Client({
   connectionString: connectionString,
   ssl: {
     rejectUnauthorized: false, // This ensures that the server's certificate will be verified.
@@ -52,9 +56,13 @@ app.get('/', async (req, res) => {
   // res.send('Hello World!')
   try {
     // Execute a query to get the current date-time
-    const result = await pool.query('SELECT NOW()');
+    await connection.connect()
+
+    const result = await connection.query('SELECT NOW()');
     // Send the result back to the client
     res.json(result.rows[0]);
+
+    await connection.end()
   } catch (error) {
     console.error('Error executing query', error.stack);
     res.status(500).send('Error executing query');
