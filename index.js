@@ -15,16 +15,16 @@ const port = process.env.PORT || 3000
 // });
 
 const connectionString = process.env.CONNECT_URL;
-const certificate = process.env.CA_CERTIFICATE
-  ? process.env.CA_CERTIFICATE
-  : fs.readFileSync('./ca-certificate.crt').toString()
-console.log('CA CERTIFICATE: ',certificate.substring(0, 30))
+// const certificate = process.env.CA_CERTIFICATE
+//   ? process.env.CA_CERTIFICATE
+//   : fs.readFileSync('./ca-certificate.crt').toString()
+// console.log('CA CERTIFICATE: ',certificate.substring(0, 30))
 
 const pool = new Pool({
   connectionString: connectionString,
   ssl: {
-    rejectUnauthorized: true, // This ensures that the server's certificate will be verified.
-    ca: certificate,
+    rejectUnauthorized: false, // This ensures that the server's certificate will be verified.
+    // ca: certificate,
   },
 });
 
