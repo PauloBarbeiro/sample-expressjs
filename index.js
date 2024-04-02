@@ -1,3 +1,4 @@
+const fs = require('fs');
 const express = require('express')
 const cors = require('cors');
 const { Pool } = require('pg');
@@ -14,8 +15,17 @@ const port = process.env.PORT || 3000
 // });
 
 const connectionString = process.env.CONNECT_URL;
+const certificate = process.env.CA_CERTIFICATE
+  ? process.env.CA_CERTIFICATE
+  : fs.readFileSync('./ca-certificate.crt').toString()
+console.log('CA CERTIFICATE: ',certificate.substring(0, 30))
+
 const pool = new Pool({
   connectionString: connectionString,
+  ssl: {
+    rejectUnauthorized: true, // This ensures that the server's certificate will be verified.
+    ca: certificate,
+  },
 });
 
 const startupMessage = `[48;2;0;0;0m [48;2;0;0;0m [48;2;0;0;0m [48;2;0;0;0m [48;2;0;0;0m [48;2;0;0;0m [48;2;0;0;0m [48;2;0;0;0m [48;2;0;0;0m [48;2;0;0;0m [48;2;0;0;0m [48;2;0;0;0m [48;2;0;0;0m [48;2;0;0;0m [48;2;0;0;0m [48;2;0;0;0m [48;2;0;0;0m [48;2;0;0;0m [48;2;0;0;0m [48;2;0;0;0m [48;2;0;0;0m [48;2;0;0;0m [48;2;0;0;0m [48;2;0;0;0m [48;2;0;0;0m [48;2;0;0;0m [48;2;0;0;0m [48;2;0;0;0m [48;2;0;0;0m [48;2;0;0;0m [48;2;0;0;0m [48;2;0;0;0m [48;2;0;0;0m[38;2;0;170;255m▄[48;2;0;0;0m[38;2;0;179;247m▄[48;2;0;0;0m [48;2;0;0;0m [48;2;0;0;0m [48;2;0;0;0m [48;2;0;0;0m [48;2;0;0;0m [48;2;0;0;0m [48;2;0;0;0m [48;2;0;0;0m [48;2;0;0;0m [48;2;0;0;0m [48;2;0;180;248m[38;2;0;0;0m▄[48;2;0;179;247m [48;2;0;179;247m [48;2;0;175;247m[38;2;0;179;247m▄[48;2;0;0;0m[38;2;0;179;247m▄[48;2;0;0;0m [48;2;0;0;0m [48;2;0;0;0m [48;2;0;0;0m [48;2;0;0;0m [48;2;0;0;0m [48;2;0;0;0m [48;2;0;0;0m [48;2;0;0;0m [48;2;0;0;0m [48;2;0;0;0m [48;2;0;0;0m [48;2;0;0;0m [48;2;0;0;0m [48;2;0;0;0m [48;2;0;0;0m [48;2;0;0;0m [48;2;0;0;0m [48;2;0;0;0m [48;2;0;0;0m [48;2;0;0;0m [48;2;0;0;0m [48;2;0;0;0m [48;2;0;0;0m [48;2;0;0;0m [48;2;0;0;0m [48;2;0;0;0m [48;2;0;0;0m [48;2;0;0;0m [48;2;0;0;0m [0m
